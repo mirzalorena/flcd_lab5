@@ -52,18 +52,19 @@ class Parser:
         productions=self.__grammar.getProductions()
 
         for key in productions.keys():
-            elems=list(productions[key])
-            if(nonTerm in elems):
-                position=elems.index(nonTerm)
-                if position>1 and position<len(elems)-1:
-                    result.append([key,productions[:position]])
+            if productions[key][0] != "epsilon":
+                elems=list(productions[key][0])
+                if(nonTerm in elems):
+                    position=elems.index(nonTerm)
+                    if position>=1 and position<len(elems)-1:
+                        result.append([key,elems[position:]])
 
         return result
 
     def follow(self):
         self.createFirstSet()
 
-        self.__follow[self.__grammar.getStartingSymb()] = "epsilon"
+        self.__follow[self.__grammar.getStartingSymb()] = {"epsilon"}
 
         repeat = True
 
@@ -75,11 +76,18 @@ class Parser:
                 for elem in aux:
                     a = elem[0]
                     y = elem[1]
-                    if y in self.__firstList.keys():
-                        if "epsilon" in self.__firstList[y]:
-                            self.__follow[nont]=self.__follow[nont]+self.__follow[a]
-                        else :
-                            self.__follow[nont]=self.__follow[nont]+self.__firstList[y]
+                    for y1 in y:
+                        if y1 in self.__firstList.keys():
+                            if "epsilon" in self.__firstList[y1]:
+                                if nont in self.__follow.keys():
+                                    self.__follow[nont] |= self.__follow[a]
+                                else:
+                                    self.__follow[nont] = self.__follow[a]
+                            else :
+                                if nont not in self.__follow.keys():
+                                    self.__follow[nont] = self.__firstList[y1]
+                                else:
+                                    self.__follow[nont] |= self.__firstList[y1]
 
             if temp==self.__follow:
                 repeat=False

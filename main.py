@@ -19,9 +19,12 @@ if __name__ == '__main__':
     option=-1
 
     sys.setrecursionlimit(50000)
-    
+
     grammar = Grammar("file.in")
     parser = Parser(grammar)
+
+    s = set("epsilon")
+    print(s)
 
     while(option!=0):
         option=int(input("What do you wanna see?"))
