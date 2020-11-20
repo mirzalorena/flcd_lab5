@@ -1,16 +1,36 @@
-# This is a sample Python script.
+from Parser import Parser
+from Grammar import Grammar
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def menu():
+    print("0. Exit")
+    print("1. Set of NonTerminals")
+    print("2. The alphabet")
+    print("3. Starting Symbol")
+    print("4. Productions")
+    print("5. Get productions for a given non-terminal")
+    print("6. Get first list ")
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    print("Test Grammar")
+    menu()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    option=-1
+
+    grammar = Grammar("file.in")
+    parser = Parser(grammar)
+
+    while(option!=0):
+        option=int(input("What do you wanna see?"))
+        if option==1:
+            print(grammar.getNonTerms())
+        elif option==2:
+            print(grammar.getAlphabet())
+        elif option==3:
+            print(grammar.getStartingSymb())
+        elif option==4:
+            print(grammar.getProductions())
+        elif option == 5:
+            nont = input("Please give a non-terminal: ")
+            print(grammar.getProductionsForSymbol(nont))
+        elif option == 6:
+            print(parser.getFirst())
