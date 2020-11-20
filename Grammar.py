@@ -7,6 +7,20 @@ class Grammar:
         self.__startingSymbol = None
         self.__alphabet = []
         self.__productions = {}
+        self.readFromFile()
+
+    def getNonTerms(self):
+        return self.__nonterminals
+
+    def getStartingSymb(self):
+        return self.__startingSymbol
+
+    def getAlphabet(self):
+        return self.__alphabet
+
+    def getProductions(self):
+        return self.__productions
+
 
     def readFromFile(self):
         file = open(self.__filename, 'r')
@@ -52,3 +66,29 @@ class Grammar:
             line = file.readline().strip()
 
         file.close()
+
+def menu():
+    print("0. Exit")
+    print("1. Set of NonTerminals")
+    print("2. The alphabet")
+    print("3. Starting Symbol")
+    print("5. Productions")
+
+if __name__ == '__main__':
+    print("Test Grammar")
+    menu()
+
+    option=-1
+
+    grammar = Grammar("file.in")
+
+    while(option!=0):
+        option=int(input("What do you wanna see?"))
+        if option==1:
+            print(grammar.getNonTerms())
+        elif option==2:
+            print(grammar.getAlphabet())
+        elif option==3:
+            print(grammar.getStartingSymb())
+        elif option==4:
+            print(grammar.getProductions())
