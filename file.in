@@ -1,0 +1,8 @@
+N={S,C}
+E={a,b,c}
+S=S
+S->aSc
+S->C
+S->epsilon
+C->bCc
+C->epsilon
