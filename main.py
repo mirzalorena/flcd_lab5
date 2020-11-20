@@ -9,6 +9,7 @@ def menu():
     print("4. Productions")
     print("5. Get productions for a given non-terminal")
     print("6. Get first list ")
+    print("7. Get follow")
 
 if __name__ == '__main__':
     print("Test Grammar")
@@ -34,3 +35,5 @@ if __name__ == '__main__':
             print(grammar.getProductionsForSymbol(nont))
         elif option == 6:
             print(parser.getFirst())
+        elif option==7:
+            print(parser.getFollow())
