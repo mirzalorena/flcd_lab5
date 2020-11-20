@@ -21,6 +21,11 @@ class Grammar:
     def getProductions(self):
         return self.__productions
 
+    def getProductionsForSymbol(self, nonTerminal):
+        if nonTerminal not in self.__productions.keys():
+            return []
+        return self.__productions[nonTerminal]
+
 
     def readFromFile(self):
         file = open(self.__filename, 'r')
@@ -73,6 +78,7 @@ def menu():
     print("2. The alphabet")
     print("3. Starting Symbol")
     print("4. Productions")
+    print("5. Get productions for a given non-terminal")
 
 if __name__ == '__main__':
     print("Test Grammar")
@@ -92,3 +98,6 @@ if __name__ == '__main__':
             print(grammar.getStartingSymb())
         elif option==4:
             print(grammar.getProductions())
+        elif option == 5:
+            nont = input("Please give a non-terminal: ")
+            print(grammar.getProductionsForSymbol(nont))
