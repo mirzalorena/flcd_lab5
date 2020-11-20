@@ -1,5 +1,6 @@
 from Parser import Parser
 from Grammar import Grammar
+import sys
 
 def menu():
     print("0. Exit")
@@ -17,6 +18,8 @@ if __name__ == '__main__':
 
     option=-1
 
+    sys.setrecursionlimit(50000)
+    
     grammar = Grammar("file.in")
     parser = Parser(grammar)
 

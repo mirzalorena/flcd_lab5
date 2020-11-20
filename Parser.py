@@ -14,20 +14,28 @@ class Parser:
         if nonterminal in self.__firstList.keys():
             return self.__firstList[nonterminal]
 
-        first_terminals = []
         terminals = self.__grammar.getAlphabet()
         productions = self.__grammar.getProductionsForSymbol(nonterminal)
+        firstTerminals = set()
 
         for rhs in productions:
-            firstSymbol = rhs[0]
-
-            if firstSymbol == "epsilon" or firstSymbol in terminals:
-                first_terminals.append(firstSymbol)
+            if rhs == "epsilon":
+                firstTerminals.add(rhs)
             else:
-                if len(first_terminals) == 0:
-                    first_terminals += self.first(firstSymbol)
+                productions_list = list(rhs)
+                count = 0
+                for i in range(len(productions_list)):
+                    firstSymbol = rhs[i]
+                    if count >= 1:
+                        break
+                    if firstSymbol in terminals:
+                        firstTerminals.add(firstSymbol)
+                        count += 1
+                    else:
+                        if firstSymbol != nonterminal:
+                            firstTerminals |= self.first(firstSymbol)
 
-        return first_terminals
+        return firstTerminals
 
 
     def getFirst(self):
