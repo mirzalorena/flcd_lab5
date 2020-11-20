@@ -52,16 +52,16 @@ class Grammar:
         self.__startingSymbol = token[1]
 
         #read the productions
-        line = file.read().strip()
+        line = file.readline().strip()
         while line != "":
-            delimiters = "-", ">"
+            delimiters = "->"
             regexPattern = '|'.join(map(re.escape, delimiters))
             tokens = re.split(regexPattern, line)
 
             if tokens[0] not in self.__productions.keys():
-                self.__productions = [tokens[1]]
+                self.__productions[tokens[0]] = [tokens[2]]
             else:
-                self.__productions[tokens[0]].append(tokens[1])
+                self.__productions[tokens[0]].append(tokens[2])
 
             line = file.readline().strip()
 
@@ -72,7 +72,7 @@ def menu():
     print("1. Set of NonTerminals")
     print("2. The alphabet")
     print("3. Starting Symbol")
-    print("5. Productions")
+    print("4. Productions")
 
 if __name__ == '__main__':
     print("Test Grammar")
