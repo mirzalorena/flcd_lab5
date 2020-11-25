@@ -23,9 +23,6 @@ if __name__ == '__main__':
     grammar = Grammar("file.in")
     parser = Parser(grammar)
 
-    s = set("epsilon")
-    print(s)
-
     while(option!=0):
         option=int(input("What do you wanna see?"))
         if option==1:

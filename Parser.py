@@ -32,39 +32,45 @@ class Parser:
                         firstTerminals.add(firstSymbol)
                         count += 1
                     else:
-                        if firstSymbol != nonterminal:
+                        if firstSymbol != nonterminal and "epsilon" in firstTerminals or len(firstTerminals) == 0:
                             firstTerminals |= self.first(firstSymbol)
 
         return firstTerminals
-
 
     def getFirst(self):
         self.createFirstSet()
         return self.__firstList
 
     def getFollow(self):
+        self.create_follow()
         self.follow()
         return self.__follow
 
-    def checkFollowForm(self,nonTerm):
-        result=[]
+    def create_follow(self):
+        for nont in self.__grammar.getNonTerms():
+            self.__follow[nont] = set()
 
-        productions=self.__grammar.getProductions()
+    def giveProductionsForFollow(self, nonTerm):
+        result = []
+        productions = self.__grammar.getProductions()
 
         for key in productions.keys():
-            if productions[key][0] != "epsilon":
-                elems=list(productions[key][0])
-                if(nonTerm in elems):
-                    position=elems.index(nonTerm)
-                    if position>=1 and position<len(elems)-1:
-                        result.append([key,elems[position:]])
+            for i in range (len(productions[key])):
+                if productions[key][i] != "epsilon":
+                    elems = list(productions[key][i])
+                    if len(elems) >= 2 and nonTerm in elems:
+                        i = 0
+                        while elems[i] != nonTerm:
+                            i += 1
+
+                        result.append([key, elems[i+1:]])
 
         return result
 
     def follow(self):
         self.createFirstSet()
 
-        self.__follow[self.__grammar.getStartingSymb()] = {"epsilon"}
+        self.__follow[self.__grammar.getStartingSymb()].add("epsilon")
 
         repeat = True
 
@@ -72,29 +78,29 @@ class Parser:
             temp=self.__follow
 
             for nont in self.__grammar.getNonTerms():
-                aux = self.checkFollowForm(nont)
+                aux = self.giveProductionsForFollow(nont)
                 for elem in aux:
                     a = elem[0]
                     y = elem[1]
+
+                    if y == []:
+                        self.__follow[nont] |= self.__follow[a]
+
                     for y1 in y:
+                        if y1 in self.__grammar.getAlphabet():
+                            self.__follow[nont].add(y1)
+                            break
                         if y1 in self.__firstList.keys():
                             if "epsilon" in self.__firstList[y1]:
-                                if nont in self.__follow.keys():
-                                    self.__follow[nont] |= self.__follow[a]
-                                else:
-                                    self.__follow[nont] = self.__follow[a]
-                            else :
-                                if nont not in self.__follow.keys():
-                                    self.__follow[nont] = self.__firstList[y1]
-                                else:
-                                    self.__follow[nont] |= self.__firstList[y1]
+                                self.__follow[nont] |= self.__follow[a]
+                                aux = self.__firstList[y1]
+                                aux.remove("epsilon")
+                                self.__follow[nont] |= aux
+                            else:
+                                self.__follow[nont] |= self.__firstList[y1]
+                                break
 
             if temp==self.__follow:
                 repeat=False
 
         return self.__follow
-
-
-
-
-
