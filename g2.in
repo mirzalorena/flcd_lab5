@@ -1,6 +1,6 @@
-N={program,declaration,type,expression,sign,md,factor,arraydecl,cmpdstmt,stmt,simplstmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
-E={+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,),{,}," ",situation,other,parsing,leave,come,individual,decision,char,float}
-S=program
+N--{program,declaration,type,expression,sign,term,md,factor,arraydecl,cmpdstmt,stmt,simplstmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
+E--{+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,)," ",situation,other,parsing,leave,come,individual,decision,char,float,a,b,c,0,1,2}
+S--program
 program->declaration
 program->cmpdstmt
 program->epsilon
@@ -11,12 +11,12 @@ type->individual
 type->decision
 type->char
 type->float
-expression->
+expression->expression sign
 sign->+
 sign->-
 sign->*
 sign->/
-factor->(expression)
+factor->( expression )
 factor->identifier
 factor->digit
 arraydecl->( )
@@ -47,8 +47,13 @@ cmpdstmt->stmt cmpdstmt
 cmdpstmt->epsilon
 identifier->letter alphanumeric
 identifier->epsilon
+letter->a
+letter->b
+letter->c
 digit->0
 digit->nonZeroDigit
+nonZeroDigit->1
+nonZeroDigit->2
 unsigned->nonZeroDigit
 unsigned-> digit unsigned
 integer-> - unsigned

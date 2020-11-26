@@ -10,6 +10,7 @@ class Parser:
         for nonT in self.__grammar.getNonTerms():
             self.__firstList[nonT] = self.first(nonT)
 
+
     def first(self, nonterminal):
         if nonterminal in self.__firstList.keys():
             return self.__firstList[nonterminal]
@@ -22,10 +23,10 @@ class Parser:
             if rhs == "epsilon":
                 firstTerminals.add(rhs)
             else:
-                productions_list = list(rhs)
+                productions_list = rhs.split(" ")
                 count = 0
                 for i in range(len(productions_list)):
-                    firstSymbol = rhs[i]
+                    firstSymbol = productions_list[i]
                     if count >= 1:
                         break
                     if firstSymbol in terminals:
@@ -33,7 +34,11 @@ class Parser:
                         count += 1
                     else:
                         if firstSymbol != nonterminal and "epsilon" in firstTerminals or len(firstTerminals) == 0:
-                            firstTerminals |= self.first(firstSymbol)
+                            aux=self.first(firstSymbol)
+                            print("AICI + "+str(aux)+" "+firstSymbol)
+                            firstTerminals |= aux
+                            if "epsilon" not in aux:
+                                break
 
         return firstTerminals
 
@@ -57,7 +62,7 @@ class Parser:
         for key in productions.keys():
             for i in range (len(productions[key])):
                 if productions[key][i] != "epsilon":
-                    elems = list(productions[key][i])
+                    elems = productions[key][i].split(" ")
                     if len(elems) >= 2 and nonTerm in elems:
                         i = 0
                         while elems[i] != nonTerm:

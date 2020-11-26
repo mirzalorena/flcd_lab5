@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     option=-1
 
-    sys.setrecursionlimit(50000)
+    sys.setrecursionlimit(5000000)
 
     grammar = Grammar("g2.in")
     parser = Parser(grammar)

@@ -32,7 +32,7 @@ class Grammar:
         line = file.readline().strip()
 
         # read the nonterminals
-        delimiters = "=", "{", "}"
+        delimiters = "--", "{", "}"
         regexPattern = '|'.join(map(re.escape, delimiters))
         tokens = re.split(regexPattern, line)
 
@@ -43,7 +43,7 @@ class Grammar:
 
         #read the alphabet
         line = file.readline().strip()
-        delimiters = "=", "{", "}"
+        delimiters = "--", "{", "}"
         regexPattern = '|'.join(map(re.escape, delimiters))
         tokens = re.split(regexPattern, line)
         alphabet = tokens[2].split(",")
@@ -53,7 +53,7 @@ class Grammar:
 
         #read the starting symbol
         line = file.readline().strip()
-        token = line.split("=")
+        token = line.split("--")
         self.__startingSymbol = token[1]
 
         #read the productions
