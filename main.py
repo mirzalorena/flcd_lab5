@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     sys.setrecursionlimit(50000)
 
-    grammar = Grammar("file.in")
+    grammar = Grammar("g2.in")
     parser = Parser(grammar)
 
     while(option!=0):

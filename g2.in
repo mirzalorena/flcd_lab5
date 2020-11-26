@@ -1,0 +1,56 @@
+N={program,declaration,type,expression,sign,md,factor,arraydecl,cmpdstmt,stmt,simplstmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
+E={+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,),{,}," ",situation,other,parsing,leave,come,individual,decision,char,float}
+S=program
+program->declaration
+program->cmpdstmt
+program->epsilon
+declaration->identifier
+declaration->type
+declaration->;
+type->individual
+type->decision
+type->char
+type->float
+expression->
+sign->+
+sign->-
+sign->*
+sign->/
+factor->(expression)
+factor->identifier
+factor->digit
+arraydecl->( )
+assignstmt->identifier = expression
+iostmt->come identifier
+iostmt->leave identifier
+ifstmt->situation condition stmt
+ifstmt->situation condition stmt other stmt
+whilestmt->parsing condition stmt
+condition->expression relation condition
+relation-><
+relation-><=
+relation->>
+relation->>=
+relation->==
+relation->!=
+relation->&&
+relation->||
+stmt->simplestmt
+stmt->structstmt
+simplestmt->assignstmt
+simplestmt->iostmt
+structstmt->cmpdstmt
+structstmt->ifstmt
+structstmt->whilestmt
+cmdpstmt->stmt
+cmpdstmt->stmt cmpdstmt
+cmdpstmt->epsilon
+identifier->letter alphanumeric
+identifier->epsilon
+digit->0
+digit->nonZeroDigit
+unsigned->nonZeroDigit
+unsigned-> digit unsigned
+integer-> - unsigned
+integer-> + unsigned
+integer-> unsigned
