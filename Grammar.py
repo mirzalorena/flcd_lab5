@@ -62,6 +62,8 @@ class Grammar:
             delimiters = "->"
             regexPattern = '|'.join(map(re.escape, delimiters))
             tokens = re.split(regexPattern, line)
+            if tokens[2] == '':
+                tokens[2] = '-'
 
             if tokens[0] not in self.__productions.keys():
                 self.__productions[tokens[0]] = [tokens[2]]

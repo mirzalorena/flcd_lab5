@@ -1,15 +1,22 @@
-N--{program,declaration,type,expression,sign,term,md,factor,arraydecl,cmpdstmt,stmt,simplstmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
-E--{+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,)," ",situation,other,parsing,leave,come,individual,decision,char,float,a,b,c,0,1,2}
+N--{program,declaration,type,expression,number,type1,paran,sign,signed,expr,term,md,factor,arraydecl,cmpdstmt,stmt,simplestmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
+E--{+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,)," ",situation,other,parsing,leave,come,individual,decision,char,float,a,b,c,d,e,f,g,h,j,i,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9}
 S--program
-program->declaration
-program->cmpdstmt
+program->declaration cmpdstmt
 program->epsilon
 declaration->type identifier ;
-type->individual
-type->decision
-type->char
-type->float
-expression->expression sign
+declaration->epsilon
+type1->individual
+type1->decision
+type1->char
+type1->float
+type->type1
+type->arraydecl
+expression->paran expr )
+paran->(
+paran->epsilon
+expression->identifier
+expr->identifier = identifier sign identifier
+expr->identifier = identifier relation identifier
 sign->+
 sign->-
 sign->*
@@ -17,13 +24,13 @@ sign->/
 factor->( expression )
 factor->identifier
 factor->digit
-arraydecl->( )
+arraydecl->type1 identifier [ number ]
 assignstmt->identifier = expression
 iostmt->come identifier
 iostmt->leave identifier
-ifstmt->situation condition stmt
-ifstmt->situation condition stmt other stmt
-whilestmt->parsing condition stmt
+ifstmt->situation ( condition ) { stmt ; }
+ifstmt->situation ( condition ) { stmt ; } other { stmt ; }
+whilestmt->parsing ( condition ) { stmt ; }
 condition->expression relation condition
 relation-><
 relation-><=
@@ -43,7 +50,6 @@ cmdpstmt->stmt
 cmpdstmt->stmt cmpdstmt
 cmdpstmt->epsilon
 identifier->letter alphanumeric
-identifier->epsilon
 letter->a
 letter->b
 letter->c
@@ -52,7 +58,13 @@ digit->nonZeroDigit
 nonZeroDigit->1
 nonZeroDigit->2
 unsigned->nonZeroDigit
-unsigned-> digit unsigned
-integer-> - unsigned
-integer-> + unsigned
-integer-> unsigned
+unsigned->digit unsigned
+integer->- unsigned
+integer->+ unsigned
+integer->unsigned
+number->0
+number->signed
+signed->+
+signed->-
+signed->epsilon
+number->nonZeroDigit digit

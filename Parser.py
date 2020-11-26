@@ -6,13 +6,18 @@ class Parser:
         self.__firstList = {}
         self.__follow = {}
 
+    def create_empty_first(self):
+        for nont in self.__grammar.getNonTerms():
+            self.__firstList[nont] = set()
+
     def createFirstSet(self):
+        self.create_empty_first()
         for nonT in self.__grammar.getNonTerms():
             self.__firstList[nonT] = self.first(nonT)
 
 
     def first(self, nonterminal):
-        if nonterminal in self.__firstList.keys():
+        if nonterminal in self.__firstList.keys() and len(self.__firstList[nonterminal]) > 0:
             return self.__firstList[nonterminal]
 
         terminals = self.__grammar.getAlphabet()
@@ -33,12 +38,17 @@ class Parser:
                         firstTerminals.add(firstSymbol)
                         count += 1
                     else:
-                        if firstSymbol != nonterminal and "epsilon" in firstTerminals or len(firstTerminals) == 0:
+                        if firstSymbol != nonterminal and ("epsilon" in firstTerminals or len(firstTerminals) == 0):
                             aux=self.first(firstSymbol)
-                            print("AICI + "+str(aux)+" "+firstSymbol)
+                            self.__firstList[firstSymbol] |= aux
                             firstTerminals |= aux
                             if "epsilon" not in aux:
                                 break
+                        else:
+                            if firstSymbol != nonterminal:
+                                aux = self.first(firstSymbol)
+                                firstTerminals |= aux
+                            break
 
         return firstTerminals
 
