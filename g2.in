@@ -4,9 +4,7 @@ S--program
 program->declaration
 program->cmpdstmt
 program->epsilon
-declaration->identifier
-declaration->type
-declaration->;
+declaration->type identifier ;
 type->individual
 type->decision
 type->char
@@ -39,7 +37,6 @@ stmt->simplestmt
 stmt->structstmt
 simplestmt->assignstmt
 simplestmt->iostmt
-structstmt->cmpdstmt
 structstmt->ifstmt
 structstmt->whilestmt
 cmdpstmt->stmt
