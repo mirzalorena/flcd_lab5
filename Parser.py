@@ -16,6 +16,11 @@ class Parser:
             self.__firstList[nonT] = self.first(nonT)
 
 
+    '''
+    Preconditions: nonterminal : String
+    Postconditions: returns the set of first terminals
+                    of given nonterminal, or empty set otherwise
+    '''
     def first(self, nonterminal):
         if nonterminal in self.__firstList.keys() and len(self.__firstList[nonterminal]) > 0:
             return self.__firstList[nonterminal]
@@ -65,6 +70,13 @@ class Parser:
         for nont in self.__grammar.getNonTerms():
             self.__follow[nont] = set()
 
+
+    '''
+    Preconditions: nonTerm : String
+    Postconditions: returns a list containing elements of type [A, y], 
+                    where those respect the condition A -> a B y, or 
+                    empty list otherwise
+    '''
     def giveProductionsForFollow(self, nonTerm):
         result = []
         productions = self.__grammar.getProductions()
@@ -82,6 +94,14 @@ class Parser:
 
         return result
 
+
+    '''
+    Preconditions: None
+    Postconditions: return the set self.__follow, containg the 
+                    terminals which follow the keys of the set (nonterminals)
+                    Ex: self.__follow[A] contains terminals which follow nonterminal A, 
+                    or epsilon if no terminal follows A.
+    '''
     def follow(self):
         self.createFirstSet()
 
