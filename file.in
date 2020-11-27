@@ -1,8 +1,8 @@
 N--{S,A,B,C,D}
-E--{int,*,a,(,)}
+E--{+,*,a,(,)}
 S--S
 S->B A
-A->int B A
+A->+ B A
 A->epsilon
 B->D C
 C->* D C

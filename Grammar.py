@@ -26,6 +26,25 @@ class Grammar:
             return []
         return self.__productions[nonTerminal]
 
+    def get_production_number(self, nonTerminal, rhs):
+        i = 0
+        stop = False
+
+        for key in self.__productions.keys():
+            if stop == True:
+                break
+            for p in self.__productions[key]:
+                if key == nonTerminal:
+                    if stop == True:
+                        break
+                    i += 1
+                    if p == rhs:
+                        stop = True
+                        break
+                else:
+                    i += 1
+
+        return i
 
     def readFromFile(self):
         file = open(self.__filename, 'r')

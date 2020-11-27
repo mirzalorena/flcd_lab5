@@ -5,6 +5,7 @@ class Parser:
         self.__grammar = grammar
         self.__firstList = {}
         self.__follow = {}
+        self.__M = {}
 
     def create_empty_first(self):
         for nont in self.__grammar.getNonTerms():
@@ -139,3 +140,95 @@ class Parser:
                 repeat=False
 
         return self.__follow
+
+    def get_first_of_sequence(self, seq):
+        p = seq.split(" ")
+        first_seq = set()
+        eps_count = 0
+        for i in range(len(p)):
+            if p[i] in self.__grammar.getAlphabet():
+                first_seq.add(p[i])
+                break
+            elif p[i] in self.__grammar.getNonTerms():
+                if "epsilon" in self.__firstList[p[i]]:
+                    first_seq |= self.__firstList[p[i]]
+                    first_seq.remove("epsilon")
+                    eps_count += 1
+                else:
+                    first_seq |= self.__firstList[p[i]]
+                    break
+
+        if eps_count == len(p):
+            first_seq.add("epsilon")
+
+        return first_seq
+
+    def construct_M_table(self):
+        self.create_follow()
+        self.follow()
+
+        for terminal in self.__grammar.getAlphabet():
+            self.__M[(terminal, terminal)] = ["pop"]
+
+        self.__M[("$", "$")] = ["acc"]
+
+        for nonTerminal in self.__grammar.getNonTerms():
+            prod = self.__grammar.getProductionsForSymbol(nonTerminal)
+            for terminal in self.__grammar.getAlphabet():
+                for rhs in prod:
+                    p = rhs.split(" ")
+                    if (nonTerminal, terminal) not in self.__M.keys():
+                        if terminal in p and terminal != "epsilon":
+                            self.__M[(nonTerminal, terminal)] = [rhs, self.__grammar.get_production_number(nonTerminal, rhs)]
+                        else:
+                            if "epsilon" in self.get_first_of_sequence(rhs) and terminal in self.__follow[nonTerminal]:
+                                self.__M[(nonTerminal, terminal)] = [rhs, self.__grammar.get_production_number(nonTerminal, rhs)]
+                            elif "epsilon" not in self.get_first_of_sequence(rhs) and terminal in self.get_first_of_sequence(rhs):
+                                self.__M[(nonTerminal, terminal)] = [rhs,
+                                                                     self.__grammar.get_production_number(nonTerminal, rhs)]
+
+        for nonTerminal in self.__grammar.getNonTerms():
+            prod = self.__grammar.getProductionsForSymbol(nonTerminal)
+            if "epsilon" in prod:
+                i = self.__grammar.get_production_number(nonTerminal, "epsilon")
+                self.__M[(nonTerminal, "$")] = ["epsilon", i]
+
+
+    def get_table(self):
+        self.construct_M_table()
+        return self.__M
+
+    def parse(self, w):
+        aux = w.split(" ")
+        alpha = ["$"]
+        alpha += aux
+        beta = ["$", self.__grammar.getStartingSymb()]
+        pi = []
+        go = True
+        s = ""
+        self.construct_M_table()
+
+        while go:
+            if (beta[len(beta) - 1], alpha[len(alpha) - 1]) in self.__M.keys():
+                aux = self.__M[(beta[len(beta) - 1], alpha[len(alpha) - 1])]
+                if len(aux) == 1:
+                    if aux[0] == "pop":
+                        beta.remove(beta[len(beta) - 1])
+                        alpha.remove(alpha[len(alpha) - 1])
+                    elif aux[0] == "acc":
+                        go = False
+                        s = "acc"
+                    else:
+                        go = False
+                        s = "err"
+                else:
+                    [b, i] = aux
+                    beta[len(beta) - 1] = b
+                    pi.append(i)
+            else:
+                go = False
+                s = "err"
+
+        return (s, pi)
+
+
