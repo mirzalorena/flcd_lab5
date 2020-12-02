@@ -191,6 +191,9 @@ class Parser:
             if "epsilon" in prod:
                 i = self.__grammar.get_production_number(nonTerminal, "epsilon")
                 self.__M[(nonTerminal, "$")] = ["epsilon", i]
+                for terminal in self.__grammar.getAlphabet():
+                    if terminal in self.__follow[nonTerminal] and (nonTerminal, terminal) not in self.__M.keys():
+                        self.__M[(nonTerminal, terminal)] = ["epsilon", i]
 
 
     def get_table(self):
@@ -209,11 +212,6 @@ class Parser:
         go = True
         s = ""
         self.construct_M_table()
-
-        #lipsesc [A,)] si [C,)] si [C,+] - nu de la asta nu merge, dar to fix
-        self.__M[("A",")")]=["epsilon",3]
-        self.__M[("C", ")")] = ["epsilon", 6]
-        self.__M[("C", "+")] = ["epsilon", 6]
 
         while go:
             if (beta[len(beta) - 1], alpha[len(alpha) - 1]) in self.__M.keys():
@@ -238,11 +236,10 @@ class Parser:
                     else:
                         if(auxB[0]!="epsilon"):
                             beta[len(beta) - 1] = auxB[0]
+                        else:
+                            del beta[len(beta) - 1]
 
                     pi.append(i)
-            #elif (beta[len(beta) - 1], "epsilon") in self.__M.keys():
-            #    beta.remove(beta[len(beta)-1])
-            #    continue
             else:
                 go = False
                 s = "err"
