@@ -184,8 +184,7 @@ class Parser:
                             if "epsilon" in self.get_first_of_sequence(rhs) and terminal in self.__follow[nonTerminal]:
                                 self.__M[(nonTerminal, terminal)] = [rhs, self.__grammar.get_production_number(nonTerminal, rhs)]
                             elif "epsilon" not in self.get_first_of_sequence(rhs) and terminal in self.get_first_of_sequence(rhs):
-                                self.__M[(nonTerminal, terminal)] = [rhs,
-                                                                     self.__grammar.get_production_number(nonTerminal, rhs)]
+                                self.__M[(nonTerminal, terminal)] = [rhs, self.__grammar.get_production_number(nonTerminal, rhs)]
 
         for nonTerminal in self.__grammar.getNonTerms():
             prod = self.__grammar.getProductionsForSymbol(nonTerminal)
@@ -200,13 +199,21 @@ class Parser:
 
     def parse(self, w):
         aux = w.split(" ")
-        alpha = ["$"]
+        alpha = []
         alpha += aux
-        beta = ["$", self.__grammar.getStartingSymb()]
+        alpha.append("$")
+        alpha.reverse()
+        beta = [ self.__grammar.getStartingSymb(), "$"]
+        beta.reverse()
         pi = []
         go = True
         s = ""
         self.construct_M_table()
+
+        #lipsesc [A,)] si [C,)] si [C,+] - nu de la asta nu merge, dar to fix
+        self.__M[("A",")")]=["epsilon",3]
+        self.__M[("C", ")")] = ["epsilon", 6]
+        self.__M[("C", "+")] = ["epsilon", 6]
 
         while go:
             if (beta[len(beta) - 1], alpha[len(alpha) - 1]) in self.__M.keys():
@@ -214,7 +221,7 @@ class Parser:
                 if len(aux) == 1:
                     if aux[0] == "pop":
                         beta.remove(beta[len(beta) - 1])
-                        alpha.remove(alpha[len(alpha) - 1])
+                        del alpha[len(alpha) - 1]
                     elif aux[0] == "acc":
                         go = False
                         s = "acc"
@@ -223,8 +230,19 @@ class Parser:
                         s = "err"
                 else:
                     [b, i] = aux
-                    beta[len(beta) - 1] = b
+                    auxB=b.split(" ")
+                    auxB.reverse()
+                    if(len(auxB)>1):
+                        del beta[len(beta)-1]
+                        beta += auxB
+                    else:
+                        if(auxB[0]!="epsilon"):
+                            beta[len(beta) - 1] = auxB[0]
+
                     pi.append(i)
+            #elif (beta[len(beta) - 1], "epsilon") in self.__M.keys():
+            #    beta.remove(beta[len(beta)-1])
+            #    continue
             else:
                 go = False
                 s = "err"
