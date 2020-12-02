@@ -11,6 +11,7 @@ def menu():
     print("5. Get productions for a given non-terminal")
     print("6. Get first list ")
     print("7. Get follow")
+    print("8. LL1 Parsing Table for sequence")
 
 if __name__ == '__main__':
     print("Test Grammar")
@@ -20,10 +21,10 @@ if __name__ == '__main__':
 
     sys.setrecursionlimit(5000000)
 
-    grammar = Grammar("file.in")
+    grammar = Grammar("g2.in")
     parser = Parser(grammar)
 
-    print(parser.parse("a * ( a + a )"))
+    #print(parser.parse("a * ( a + a )"))
 
     while(option!=0):
         option=int(input("What do you wanna see?"))
@@ -42,3 +43,6 @@ if __name__ == '__main__':
             print(parser.getFirst())
         elif option==7:
             print(parser.getFollow())
+        elif option==8:
+            seq=input("Give a sequence: ")
+            print(parser.parse(seq))
