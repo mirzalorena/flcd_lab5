@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     sys.setrecursionlimit(5000000)
 
-    grammar = Grammar("g2.in")
+    grammar = Grammar("file.in")
     parser = Parser(grammar)
 
     #print(parser.parse("a * ( a + a )"))
