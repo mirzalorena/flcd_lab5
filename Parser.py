@@ -7,6 +7,7 @@ class Parser:
         self.__firstList = {}
         self.__follow = {}
         self.__M = {}
+        self.__err = None
         self.__parsingTree = ParsingTree(self.__grammar.getStartingSymb())
 
     def create_empty_first(self):
@@ -245,6 +246,8 @@ class Parser:
             else:
                 go = False
                 s = "err"
+                self.__err = (beta[len(beta) - 1], alpha[len(alpha) - 1])
+                print(self.__err)
 
         return (s, pi)
 
