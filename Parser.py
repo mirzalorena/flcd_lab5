@@ -1,4 +1,5 @@
 from Grammar import Grammar
+from ParsingTree import ParsingTree
 
 class Parser:
     def __init__(self, grammar):
@@ -6,6 +7,7 @@ class Parser:
         self.__firstList = {}
         self.__follow = {}
         self.__M = {}
+        self.__parsingTree = ParsingTree(self.__grammar.getStartingSymb())
 
     def create_empty_first(self):
         for nont in self.__grammar.getNonTerms():
@@ -245,5 +247,15 @@ class Parser:
                 s = "err"
 
         return (s, pi)
+
+    def construct_parsing_tree(self, sequence):
+        res, self.__pi = self.parse(sequence)
+        if res == "acc":
+            for elem in self.__pi:
+                prod = self.__grammar.get_production_by_number(elem)
+                for p in prod.split(" "):
+                    node =  ParsingTree(p)
+                    self.__parsingTree.add_child(node)
+                
 
 

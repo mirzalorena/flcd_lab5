@@ -13,6 +13,7 @@ type->type1
 type->arraydecl
 expression->paran expr )
 paran->(
+expression->digit
 paran->epsilon
 expression->identifier
 expr->identifier = identifier sign identifier
@@ -25,7 +26,7 @@ factor->( expression )
 factor->identifier
 factor->digit
 arraydecl->type1 identifier [ number ]
-assignstmt->identifier = expression
+assignstmt->identifier = expression ;
 iostmt->come identifier
 iostmt->leave identifier
 ifstmt->situation ( condition ) { stmt ; }
@@ -46,10 +47,13 @@ simplestmt->assignstmt
 simplestmt->iostmt
 structstmt->ifstmt
 structstmt->whilestmt
-cmdpstmt->stmt
+cmpdstmt->stmt
 cmpdstmt->stmt cmpdstmt
-cmdpstmt->epsilon
+cmpdstmt->epsilon
 identifier->letter alphanumeric
+alphanumeric->epsilon
+alphanumeric->letter
+alphanumeric->digit
 letter->a
 letter->b
 letter->c

@@ -21,11 +21,11 @@ if __name__ == '__main__':
 
     sys.setrecursionlimit(5000000)
 
-    grammar = Grammar("file.in")
+    grammar = Grammar("g2.in")
     parser = Parser(grammar)
 
-    #print(parser.parse("a * ( a + a )"))
-
+    print(parser.parse("individual a ; a = 2 ;"))
+    
     while(option!=0):
         option=int(input("What do you wanna see?"))
         if option==1:

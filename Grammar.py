@@ -46,6 +46,25 @@ class Grammar:
 
         return i
 
+    def get_production_by_number(self, number):
+        prod = None
+        i = 1
+        stop = False
+        for key in self.__productions.keys():
+            if stop == True:
+                break 
+            for p in self.__productions[key]:
+                if stop == True:
+                    break 
+                if i == number:
+                    stop = True 
+                    prod = p 
+                    break
+                i += 1
+                
+        return prod
+                
+
     def readFromFile(self):
         file = open(self.__filename, 'r')
         line = file.readline().strip()
