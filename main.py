@@ -24,7 +24,7 @@ if __name__ == '__main__':
     grammar = Grammar("g2.in")
     parser = Parser(grammar)
 
-    print(parser.parse("individual a ; a = 2 "))
+    print(parser.parse("individual a ; a = 2 ;"))
     
     while(option!=0):
         option=int(input("What do you wanna see?"))
