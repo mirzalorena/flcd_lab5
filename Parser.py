@@ -221,7 +221,8 @@ class Parser:
                 aux = self.__M[(beta[len(beta) - 1], alpha[len(alpha) - 1])]
                 if len(aux) == 1:
                     if aux[0] == "pop":
-                        beta.remove(beta[len(beta) - 1])
+                        del beta[len(beta) - 1]
+                        #beta.remove(beta[len(beta) - 1])
                         del alpha[len(alpha) - 1]
                     elif aux[0] == "acc":
                         go = False

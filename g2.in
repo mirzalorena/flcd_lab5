@@ -1,9 +1,9 @@
-N--{program,declaration,type,expression,number,type1,paran,sign,signed,expr,term,md,factor,arraydecl,cmpdstmt,stmt,simplestmt,assignstmt,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
+N--{program,declaration,type,expression,number,type1,paran,sign,signed,expr,term,md,factor,arraydecl,cmpdstmt,stmt,simplestmt,assignstmt,assgnstmt1,assgnstmt2,iostmt,structstmt,ifstmt,whilestmt,condition,relation,identifier,letter,alphanumeric,noconst,nonZeroDigit,digit,integer,character}
 E--{+,-,*,/,=,==,<,<=,>,>=,&&,||,!=,;,(,)," ",situation,other,parsing,leave,come,individual,decision,char,float,a,b,c,d,e,f,g,h,j,i,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9}
 S--program
 program->declaration cmpdstmt
 program->epsilon
-declaration->type identifier ;
+declaration->type identifier ; declaration
 declaration->epsilon
 type1->individual
 type1->decision
@@ -11,13 +11,13 @@ type1->char
 type1->float
 type->type1
 type->arraydecl
-expression->paran expr )
-paran->(
+expression->identifier
+expression->expr
+expression->( expr )
 expression->digit
 paran->epsilon
-expression->identifier
-expr->identifier = identifier sign identifier
-expr->identifier = identifier relation identifier
+expr->identifier sign identifier
+expr->identifier relation identifier
 sign->+
 sign->-
 sign->*
@@ -26,13 +26,14 @@ factor->( expression )
 factor->identifier
 factor->digit
 arraydecl->type1 identifier [ number ]
-assignstmt->identifier = expression ;
+assignstmt->identifier = expression sign expression ;
+assgnstmt1->identifier = expression
 iostmt->come identifier
 iostmt->leave identifier
-ifstmt->situation ( condition ) { stmt ; }
-ifstmt->situation ( condition ) { stmt ; } other { stmt ; }
-whilestmt->parsing ( condition ) { stmt ; }
-condition->expression relation condition
+ifstmt->situation ( condition ) { stmt } other { stmt }
+whilestmt->parsing ( condition ) { stmt }
+condition->identifier relation identifier
+condition->epsilon
 relation-><
 relation-><=
 relation->>
@@ -44,19 +45,20 @@ relation->||
 stmt->simplestmt
 stmt->structstmt
 simplestmt->assignstmt
-simplestmt->iostmt
+simplestmt->iostmt ;
 structstmt->ifstmt
 structstmt->whilestmt
-cmpdstmt->stmt
+cmpdstmt->declaration
 cmpdstmt->stmt cmpdstmt
 cmpdstmt->epsilon
-identifier->letter alphanumeric
+identifier->letter
 alphanumeric->epsilon
 alphanumeric->letter
 alphanumeric->digit
 letter->a
 letter->b
 letter->c
+letter->g
 digit->0
 digit->nonZeroDigit
 nonZeroDigit->1
