@@ -1,5 +1,19 @@
 from Grammar import Grammar
-from ParsingTree import ParsingTree
+from ParsingTree import ParsingTree, Node
+
+class Pair:
+    def __init__(self, key, val):
+        self.__key = key
+        self.__val = val
+
+    def __str__(self):
+        return " {" + str(self.__key) + ", " + str(self.__val) + "}"
+
+    def get_key(self):
+        return self.__key
+
+    def get_val(self):
+        return self.__val
 
 class Parser:
     def __init__(self, grammar):
@@ -8,7 +22,8 @@ class Parser:
         self.__follow = {}
         self.__M = {}
         self.__err = None
-        self.__parsingTree = ParsingTree(self.__grammar.getStartingSymb())
+        #self.__parsingTree = ParsingTree(None)
+        self.__parseTable = []
 
     def create_empty_first(self):
         for nont in self.__grammar.getNonTerms():
@@ -252,14 +267,77 @@ class Parser:
 
         return (s, pi)
 
-    def construct_parsing_tree(self, sequence):
+    def construct_parsing_table(self, sequence):
         res, self.__pi = self.parse(sequence)
+        cnt = 1
         if res == "acc":
-            for elem in self.__pi:
-                prod = self.__grammar.get_production_by_number(elem)
-                for p in prod.split(" "):
-                    node =  ParsingTree(p)
-                    self.__parsingTree.add_child(node)
-                
+            for i in range (len(self.__pi)):
+                prod = self.__grammar.get_production_by_number(self.__pi[i])
+
+                if len(self.__parseTable) == 0:
+                    self.__parseTable.append(Pair(cnt, Pair(prod[1], Pair(-1, -1))))
+                    cnt += 1
+
+                    p = prod[0].split(" ")
+                    self.__parseTable.append(Pair(cnt, Pair(p[0], Pair(self.get_tabel_index(prod[1], 0), -1))))
+                    cnt += 1
+                    for j in range (1, len(p)):
+                        if prod[1] in p[:j-1]:
+                            self.__parseTable.append(Pair(cnt, Pair(p[j], Pair(self.get_tabel_index(prod[1], 1), cnt - 1))))
+                        else:
+                            self.__parseTable.append(
+                                Pair(cnt, Pair(p[j], Pair(self.get_tabel_index(prod[1], 0), cnt - 1))))
+                        cnt += 1
+                else:
+                    p = prod[0].split(" ")
+                    self.__parseTable.append(Pair(cnt, Pair(p[0], Pair(self.get_tabel_index(prod[1], 0), -1))))
+                    cnt += 1
+                    for j in range(1, len(p)):
+                        if prod[1] in p[:j-1]:
+                            self.__parseTable.append(
+                                Pair(cnt, Pair(p[j], Pair(self.get_tabel_index(prod[1], 1), cnt - 1))))
+                        else:
+                            self.__parseTable.append(
+                                Pair(cnt, Pair(p[j], Pair(self.get_tabel_index(prod[1], 0), cnt - 1))))
+                        cnt += 1
 
 
+    def get_tabel_index(self, father, is_siblig):
+        i = len(self.__parseTable) - 1
+        cnt = 0
+        if is_siblig:
+            cnt = 1
+        while i >= 0:
+            if self.__parseTable[i].get_val().get_key() == father:
+                if cnt == 0:
+                    return self.__parseTable[i].get_key()
+                else:
+                    cnt -= 1
+            i -= 1
+
+
+
+
+    def create_parse_table(self):
+        self.construct_parsing_table("a + ( a * a )")
+
+        for p in self.__parseTable:
+            print(str(p))
+
+    def create_table(self, pi):
+        for i in range (len(pi)):
+            prod = self.__grammar.get_production_by_number(pi[i])
+
+            if self.__parsingTree.get_root() == None:
+                self.__parsingTree.set_root(Node(prod[1]))
+                p = prod[0].split(" ")
+
+                for p1 in p:
+                    self.__parsingTree.add_child(Node(p1))
+            else:
+                p = prod[0].split(" ")
+                self.__parsingTree.search_and_insert(0, prod[1], p)
+
+
+    def tree_inorder(self):
+        self.__parsingTree.inorder(self.__parsingTree.get_root())

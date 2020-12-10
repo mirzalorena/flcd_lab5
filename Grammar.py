@@ -50,6 +50,7 @@ class Grammar:
         prod = None
         i = 1
         stop = False
+        k = None
         for key in self.__productions.keys():
             if stop == True:
                 break 
@@ -58,11 +59,12 @@ class Grammar:
                     break 
                 if i == number:
                     stop = True 
-                    prod = p 
+                    prod = p
+                    k = key
                     break
                 i += 1
                 
-        return prod
+        return (prod, k)
                 
 
     def readFromFile(self):
