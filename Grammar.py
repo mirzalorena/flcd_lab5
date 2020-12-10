@@ -89,6 +89,9 @@ class Grammar:
         for alpha in alphabet:
             self.__alphabet.append(alpha)
 
+        self.__alphabet.append("{")
+        self.__alphabet.append("}")
+
         #read the starting symbol
         line = file.readline().strip()
         token = line.split("--")
@@ -109,6 +112,9 @@ class Grammar:
                 self.__productions[tokens[0]].append(tokens[2])
 
             line = file.readline().strip()
+
+        if "relation" in self.__productions.keys():
+            self.__productions["relation"].append(">")
 
         file.close()
 

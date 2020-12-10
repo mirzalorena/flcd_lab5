@@ -25,7 +25,9 @@ if __name__ == '__main__':
     parser = Parser(grammar)
 
     print(parser.parse("individual a ; a = 2 ;"))
-    
+
+    print(parser.parse("individual a ; individual b ; individual g ; come a ; come b ; parsing ( a != b ) { situation ( a > b ) { a = a - b ; } other { b = b - a ; } } g = a - 0 ; leave g ;"))
+
     while(option!=0):
         option=int(input("What do you wanna see?"))
         if option==1:
