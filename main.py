@@ -12,6 +12,7 @@ def menu():
     print("6. Get first list ")
     print("7. Get follow")
     print("8. LL1 Parsing Table for sequence")
+    print("9. Create parsing table for sequence")
 
 if __name__ == '__main__':
     print("Test Grammar")
@@ -24,7 +25,7 @@ if __name__ == '__main__':
     grammar = Grammar("file.in")
     parser = Parser(grammar)
 
-    parser.create_parse_table()
+    #parser.create_parse_table()
 
     #print(parser.parse("individual a ; a = 2 ;"))
 
@@ -50,3 +51,5 @@ if __name__ == '__main__':
         elif option==8:
             seq=input("Give a sequence: ")
             print(parser.parse(seq))
+        elif option==9:
+            parser.create_parse_table()

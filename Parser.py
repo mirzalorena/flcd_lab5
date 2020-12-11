@@ -302,6 +302,7 @@ class Parser:
                         cnt += 1
 
 
+
     def get_tabel_index(self, father, is_siblig):
         i = len(self.__parseTable) - 1
         cnt = 0
@@ -316,13 +317,21 @@ class Parser:
             i -= 1
 
 
-
-
     def create_parse_table(self):
         self.construct_parsing_table("a + ( a * a )")
 
         for p in self.__parseTable:
             print(str(p))
+
+        self.saveParseTableToFile("out1.txt")
+
+    def saveParseTableToFile(self,fileName):
+        outputFile=open(fileName,"w")
+
+        for p in self.__parseTable:
+            outputFile.write(str(p)+"\n")
+
+        outputFile.close()
 
     def create_table(self, pi):
         for i in range (len(pi)):
