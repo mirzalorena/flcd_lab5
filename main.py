@@ -25,8 +25,6 @@ if __name__ == '__main__':
     grammar = Grammar("file.in")
     parser = Parser(grammar)
 
-    #parser.create_parse_table()
-
     #print(parser.parse("individual a ; a = 2 ;"))
 
     #print(parser.parse("individual a ; individual b ; individual g ; come a ; come b ; parsing ( a != b ) { situation ( a > b ) { a = a - b ; } other { b = b - a ; } } g = a - 0 ; leave g ;"))

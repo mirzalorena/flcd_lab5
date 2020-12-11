@@ -1,5 +1,4 @@
 from Grammar import Grammar
-from ParsingTree import ParsingTree, Node
 
 class Pair:
     def __init__(self, key, val):
@@ -181,6 +180,11 @@ class Parser:
 
         return first_seq
 
+    '''
+        Preconditions: none
+        Postconditions: constructs self.__M table, needed for the
+                        parsing process
+        '''
     def construct_M_table(self):
         self.create_follow()
         self.follow()
@@ -218,6 +222,13 @@ class Parser:
         self.construct_M_table()
         return self.__M
 
+    '''
+        Preconditions: w : String
+        Postconditions: returns s - String containing if the sequence
+                        is accepted("acc") or not("err")
+                        and pi - List, the productions string corresponding
+                        to the given sequence
+    '''
     def parse(self, w):
         aux = w.split(" ")
         alpha = []
@@ -267,6 +278,11 @@ class Parser:
 
         return (s, pi)
 
+    '''
+        Preconditions: sequence : String
+        Postconditions: constructs the parsing table self__parseTable
+                        based on the results of parsing the sequence
+    '''
     def construct_parsing_table(self, sequence):
         res, self.__pi = self.parse(sequence)
         cnt = 1
@@ -301,8 +317,12 @@ class Parser:
                                 Pair(cnt, Pair(p[j], Pair(self.get_tabel_index(prod[1], 0), cnt - 1))))
                         cnt += 1
 
-
-
+    '''
+            Preconditions: father - String, is_sibling - int
+            Postconditions: returns the table index for a given
+                            element, based on its father position
+                            and whether or not it is a sibling
+    '''
     def get_tabel_index(self, father, is_siblig):
         i = len(self.__parseTable) - 1
         cnt = 0
@@ -332,21 +352,3 @@ class Parser:
             outputFile.write(str(p)+"\n")
 
         outputFile.close()
-
-    def create_table(self, pi):
-        for i in range (len(pi)):
-            prod = self.__grammar.get_production_by_number(pi[i])
-
-            if self.__parsingTree.get_root() == None:
-                self.__parsingTree.set_root(Node(prod[1]))
-                p = prod[0].split(" ")
-
-                for p1 in p:
-                    self.__parsingTree.add_child(Node(p1))
-            else:
-                p = prod[0].split(" ")
-                self.__parsingTree.search_and_insert(0, prod[1], p)
-
-
-    def tree_inorder(self):
-        self.__parsingTree.inorder(self.__parsingTree.get_root())
